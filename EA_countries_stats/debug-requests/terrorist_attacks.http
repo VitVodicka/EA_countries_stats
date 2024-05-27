@@ -1,0 +1,5 @@
+
+### calculate average number of terrorist attacks of country
+/average_terrorist_attacks/<country>
+### delete terorist attack by id
+DELETE /terrorist_attack/id
