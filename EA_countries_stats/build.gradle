@@ -26,12 +26,19 @@ ext {
 }
 
 dependencies {
-    implementation 'org.springframework.modulith:spring-modulith-starter-core'
+    // spring framework
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // development helpers
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+
+    // testing
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.modulith:spring-modulith-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'io.rest-assured:rest-assured'
+    testImplementation 'io.rest-assured:spring-mock-mvc'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine'
 }
 
 dependencyManagement {
