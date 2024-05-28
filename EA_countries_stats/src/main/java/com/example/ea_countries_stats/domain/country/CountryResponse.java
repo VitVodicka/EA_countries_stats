@@ -5,8 +5,10 @@ import lombok.Data;
 
 @Data
 public class CountryResponse {
+    /*
     @NotNull
-    private Long id;
+    private Long id;*/
+
 
     @NotNull
     private Long countryId;
@@ -18,7 +20,7 @@ public class CountryResponse {
     private String isocode;
 
     public CountryResponse(Country country) {
-        this.id = country.getId();
+        //this.id = country.getId();
         this.countryId = country.getCountryId();
         this.countryTxt = country.getCountryTxt();
         this.isocode = country.getIsoCode();

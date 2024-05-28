@@ -2,8 +2,8 @@
 GET localhost:8080/countries
 
 ### Get a list of all countries based on id
-    /countries/id
+GET localhost:8080/countries/1
 
 
 ###: POST a mew country
-POST /countries/country
+POST localhost:8080/countries/country

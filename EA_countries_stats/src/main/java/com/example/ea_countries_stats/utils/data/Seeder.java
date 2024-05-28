@@ -1,10 +1,13 @@
 package com.example.ea_countries_stats.utils.data;
 
+import com.example.ea_countries_stats.domain.country.Country;
 import com.example.ea_countries_stats.domain.country.CountryService;
 import com.example.ea_countries_stats.domain.terroristAttack.TerroristAttackService;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 @Service
 @Slf4j
@@ -20,19 +23,11 @@ public class Seeder {
 
     @PostConstruct
     public void seedDefaultData() {
-        /*
-        User user1 = new User(1L, "Ivo", "ivo", new ArrayList<>());
-        User user2 = new User(2L, "Marie", "mar777", new ArrayList<>());
-        userService.createUser(user1);
-        userService.createUser(user2);
 
-        Account account1 = new Account(1L, user1, 100.0);
-        Account account2 = new Account(2L, user2, 200.0);
-        accountService.createAccount(account1);
-        accountService.createAccount(account2);
-
-        user1.attachAccount(account2);
-        account2.attachUser(user1);*/
+        Country country1 = new Country(1L, 1L, "Czechia", "151-05", new ArrayList<>());
+        Country country2 = new Country(2L, 2L, "CzechoSlovaika", "151-05", new ArrayList<>());
+        countryService.addCountry(country1);
+        countryService.addCountry(country2);
 
         log.info("--- Default data seeded ---");
     }
