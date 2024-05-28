@@ -24,8 +24,12 @@ public class Seeder {
     @PostConstruct
     public void seedDefaultData() {
 
-        Country country1 = new Country(1L, 1L, "Czechia", "151-05", new ArrayList<>());
-        Country country2 = new Country(2L, 2L, "CzechoSlovaika", "151-05", new ArrayList<>());
+        //Country country1 = new Country( 1L, "Czechia", "151-05", new ArrayList<>());
+        //Country country2 = new Country( 2L, "CzechoSlovaika", "151-05", new ArrayList<>());
+
+        Country country1 = new Country( 1L, "Czechia", "151-05");
+        Country country2 = new Country( 2L, "CzechoSlovaika", "151-05");
+
         countryService.addCountry(country1);
         countryService.addCountry(country2);
 

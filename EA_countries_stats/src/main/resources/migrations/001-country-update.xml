@@ -8,15 +8,19 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
         http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+
     <changeSet id="1" author="Vit">
         <createTable tableName="country">
             <column name="country_id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false" />
+                <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="country_txt" type="varchar(255)"/>
             <column name="iso_code" type="varchar(255)"/>
-
-
         </createTable>
     </changeSet>
+
+    <changeSet id="2" author="Vit">
+        <renameTable oldTableName="country" newTableName="countries"/>
+    </changeSet>
+
 </databaseChangeLog>

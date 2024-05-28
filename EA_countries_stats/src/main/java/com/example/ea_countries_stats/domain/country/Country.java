@@ -1,6 +1,11 @@
 package com.example.ea_countries_stats.domain.country;
 
 import com.example.ea_countries_stats.domain.terroristAttack.TerroristAttack;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,25 +17,22 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class Country {
-    @NotNull
-    private Long id;
 
-    @NotNull
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long countryId;
 
-    @NotNull
+    @NotEmpty
     private String countryTxt;
 
     @NotNull
     private String isocode;
 
-    @NotNull
-    private List<TerroristAttack> terroristAttacksList = new ArrayList<>();
+    /*@NotNull
+    private List<TerroristAttack> terroristAttacksList = new ArrayList<>();*/
 
-    public Long getId(){
-        return id;
-    }
     public Long getCountryId(){
         return countryId;
     }
