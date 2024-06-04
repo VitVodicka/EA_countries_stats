@@ -1,9 +1,7 @@
 package com.example.ea_countries_stats.domain.terroristAttack;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.ea_countries_stats.domain.country.Country;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,4 +31,8 @@ public class TerroristAttack {
 
     @NotNull
     private Long countryId;
+
+    @ManyToOne
+    @JoinColumn(name = "country_id", nullable = false)
+    private Country country;
 }

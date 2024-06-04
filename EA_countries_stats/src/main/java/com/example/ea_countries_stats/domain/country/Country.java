@@ -33,8 +33,8 @@ public class Country {
     @Column(name = "iso_code")
     private String isocode;
 
-    /*@NotNull
-    private List<TerroristAttack> terroristAttacksList = new ArrayList<>();*/
+    @OneToMany(mappedBy = "country", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TerroristAttack> terroristAttacksList = new ArrayList<>();
 
     public Long getCountryId(){
         return countryId;
