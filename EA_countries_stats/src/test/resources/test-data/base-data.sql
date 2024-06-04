@@ -1,1 +1,1 @@
-INSERT INTO public.countries (country_id, country_txt, iso_code) VALUES (1, 'test', 'test');
+INSERT INTO public.country (country_txt, iso_code) VALUES ( 'test', 'test');
