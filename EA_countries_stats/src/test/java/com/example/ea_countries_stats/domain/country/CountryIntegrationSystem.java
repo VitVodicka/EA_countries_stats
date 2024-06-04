@@ -11,8 +11,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
@@ -33,13 +32,18 @@ public class CountryIntegrationSystem {
     }
 
     @Test
-    public void testGetAllAccounts() {
+    public void testGetAllCountries() {
         given()
                 .when()
                 .get("/countries")
                 .then()
                 .statusCode(200)
-                .body("countries.id", containsInAnyOrder(1, 2));
+                .log().body()
+                .body("items.find { it.countryTxt == 'Czechia' }", notNullValue());
+    }
+
+    @Test
+    public void get(){
 
     }
 

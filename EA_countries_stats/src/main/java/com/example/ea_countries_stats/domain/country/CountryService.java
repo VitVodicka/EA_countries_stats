@@ -9,18 +9,24 @@ import java.util.Optional;
 
 @Service
 public class CountryService {
-    private List<Country> countries = new ArrayList<>();
+    private CountryRepository repository;
+
+    public CountryService(CountryRepository repository){
+        this.repository= repository;
+    }
 
     public List<Country> getAllCountries() {
+        List<Country> countries = new ArrayList<>();
+        repository.findAll().forEach(countries::add);
         return countries;
     }
 
     public Optional<Country> getCountry(Long id) {
-        return countries.stream().filter(account -> account.getCountryId().equals(id))
-                .findFirst();
+        return repository.findById(id); // Correct way to find by ID
     }
-    public void addCountry(Country country) {
-        countries.add(country);
+    public Country addCountry(Country country) {
+        return repository.save(country);
+        //countries.add(country);
 
     }
 }

@@ -1,1 +1,1 @@
-TRUNCATE TABLE countries CASCADE;
+TRUNCATE TABLE public.country

@@ -21,6 +21,7 @@ public class CountryController {
         this.countryService = countryService;
     }
 
+
     @GetMapping(value = "", produces = "application/json")
     @Valid
     public ArrayResponse<CountryResponse> getCountries() {
@@ -33,8 +34,8 @@ public class CountryController {
     @GetMapping(value = "/{id}", produces = "application/json")
     @Valid
     public ObjectResponse<CountryResponse> getCountry(@PathVariable Long id) {
-        Country country = countryService.getCountry(id)
-                .orElseThrow(NotFoundException::new);
+        Country country = countryService.getCountry(id).orElseThrow(NotFoundException::new);
+
 
         return ObjectResponse.of(country, CountryResponse::new);
     }
