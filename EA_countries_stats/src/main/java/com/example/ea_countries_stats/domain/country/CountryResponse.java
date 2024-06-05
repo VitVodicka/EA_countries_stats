@@ -33,10 +33,4 @@ public class CountryResponse {
                     .collect(Collectors.toList());
         }
     }
-    public CountryResponse(Country country, boolean showTerroristAttack) {
-        this.countryId = country.getCountryId();
-        this.countryTxt = country.getCountryTxt();
-        this.isocode = country.getIsoCode();
-
-    }
 }

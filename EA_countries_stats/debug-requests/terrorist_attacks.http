@@ -2,4 +2,31 @@
 ### calculate average number of terrorist attacks of country
 /average_terrorist_attacks/<country>
 ### delete terorist attack by id
-DELETE /terrorist_attack/id
+DELETE localhost:8090/terrorist_attacks/10
+
+### delete terorist attack by id
+POST http://localhost:8090/terrorist_attacks
+Content-Type: application/json
+
+{
+  "date": "2023-01-15T11:30:00.000Z",
+  "location": "New York",
+  "target": "Building",
+  "casualities": 1000,
+  "country_id": 1
+}
+
+### Send PUT request with json body
+PUT http://localhost:8090/terrorist_attacks/7
+Content-Type: application/json
+
+{
+  "date": "2023-01-15T11:30:00.000Z",
+  "location": "Praha",
+  "target": "Building",
+  "casualities": 1000,
+  "country_id": 1
+}
+### GETS request with json body
+GET http://localhost:8090/terrorist_attacks/
+

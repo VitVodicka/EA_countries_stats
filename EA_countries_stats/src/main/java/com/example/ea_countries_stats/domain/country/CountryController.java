@@ -33,7 +33,7 @@ public class CountryController {
     public ArrayResponse<CountryResponse> getCountries() {
         List<Country> listCountry = countryService.getAllCountries();
         return ArrayResponse.of(listCountry,CountryResponse::new);
-        
+
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
@@ -45,21 +45,6 @@ public class CountryController {
         return ObjectResponse.of(country, CountryResponse::new);
     }
 
-    @PostMapping(value = "", produces = "application/json")
-    @ResponseStatus(HttpStatus.CREATED)
-    @Valid
-    public ObjectResponse<CountryResponse> createCountry (@RequestBody @Valid CountryRequest countryRequest) {
-    //TODO check for id
-        if (!countryService.getAllCountries().contains(countryRequest.getCountryId())) {
-            Country country = new Country();
-            countryRequest.toCountry(country, countryService);
-            countryService.addCountry(country);
-            return ObjectResponse.of(country, CountryResponse::new);
-        } else {
-            throw new NotFoundException();
-        }
 
-
-    }
 
 }

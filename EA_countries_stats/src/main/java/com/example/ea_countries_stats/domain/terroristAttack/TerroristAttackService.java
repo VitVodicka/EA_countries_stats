@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TerroristAttackService {
-    private List<TerroristAttack> terroristAttackList = new ArrayList<>();
     private TerroristAttackRepository attackRepository;
 
 
@@ -19,12 +19,22 @@ public class TerroristAttackService {
         this.attackRepository = attackRepository;
     }
     public void deleteTerroristAttack(long id) {
-        terroristAttackList.remove(id);
+        attackRepository.deleteById(id);
     }
 
     public List<TerroristAttack> getAllTeroristAttacks() {
         List<TerroristAttack> terroristAttacks = new ArrayList<>();
         attackRepository.findAll().forEach(terroristAttacks::add);
         return terroristAttacks;
+    }
+    public TerroristAttack createTerroristAttack(TerroristAttack terroristAttack){
+        return attackRepository.save(terroristAttack);
+    }
+    public Optional<TerroristAttack> getTerroristAttack(Long id) {
+        return attackRepository.findById(id);
+    }
+    public TerroristAttack updateTerroristAttack(Long id, TerroristAttack terroristAttack) {
+        terroristAttack.setAttackId(id);
+        return attackRepository.save(terroristAttack);
     }
 }
