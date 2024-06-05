@@ -31,9 +31,9 @@ public class CountryController {
     @GetMapping(value = "", produces = "application/json")
     @Valid
     public ArrayResponse<CountryResponse> getCountries() {
-        List<Country> countries = countryService.getAllCountries();
-        return ArrayResponse.of(countries, CountryResponse::new);
-
+        List<Country> listCountry = countryService.getAllCountries();
+        return ArrayResponse.of(listCountry,CountryResponse::new);
+        
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")

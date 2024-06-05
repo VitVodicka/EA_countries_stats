@@ -21,9 +21,9 @@ public class CountryService {
     }
 
     public List<Country> getAllCountries() {
-        List<Country> countries = new ArrayList<>();
-        repository.findAll().forEach(countries::add);
-        return countries;
+
+        return repository.findAll();
+
     }
 
     public Optional<Country> getCountry(Long id) {

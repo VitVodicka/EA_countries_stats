@@ -1,8 +1,13 @@
 package com.example.ea_countries_stats.domain.country;
 
 import com.example.ea_countries_stats.domain.terroristAttack.TerroristAttack;
+
+import com.example.ea_countries_stats.domain.terroristAttack.TerroristAttackResponse;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class CountryResponse {
@@ -16,17 +21,22 @@ public class CountryResponse {
     @NotNull
     private String isocode;
 
-    TerroristAttack attack;
-    int numberTerroristAttacks;
+    private List<TerroristAttackResponse> attacks;
 
     public CountryResponse(Country country) {
         this.countryId = country.getCountryId();
         this.countryTxt = country.getCountryTxt();
         this.isocode = country.getIsoCode();
-        this.numberTerroristAttacks = country.getTerroristAttacksList().size();
-        if (!country.getTerroristAttacksList().isEmpty()) {
-            // Assuming you want to take the first attack if multiple exist
-            this.attack = country.getTerroristAttacksList().get(0);
+        if(country.getTerroristAttacksList().size()>0) {
+            this.attacks = country.getTerroristAttacksList().stream()
+                    .map(TerroristAttackResponse::new)
+                    .collect(Collectors.toList());
         }
+    }
+    public CountryResponse(Country country, boolean showTerroristAttack) {
+        this.countryId = country.getCountryId();
+        this.countryTxt = country.getCountryTxt();
+        this.isocode = country.getIsoCode();
+
     }
 }
