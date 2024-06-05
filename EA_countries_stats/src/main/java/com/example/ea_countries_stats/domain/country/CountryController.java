@@ -1,5 +1,7 @@
 package com.example.ea_countries_stats.domain.country;
 
+import com.example.ea_countries_stats.domain.terroristAttack.TerroristAttackResponse;
+import com.example.ea_countries_stats.domain.terroristAttack.TerroristAttackService;
 import com.example.ea_countries_stats.utils.exceptions.NotFoundException;
 import com.example.ea_countries_stats.utils.response.ArrayResponse;
 import com.example.ea_countries_stats.utils.response.ObjectResponse;
@@ -9,26 +11,29 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("countries")
 @Validated
 public class CountryController {
 
     private final CountryService countryService;
+    private final TerroristAttackService terroristAttackService;
 
     @Autowired
-    public CountryController(CountryService countryService) {
+    public CountryController(CountryService countryService, TerroristAttackService terroristAttackService) {
         this.countryService = countryService;
+        this.terroristAttackService=terroristAttackService;
     }
 
 
     @GetMapping(value = "", produces = "application/json")
     @Valid
     public ArrayResponse<CountryResponse> getCountries() {
-        return ArrayResponse.of(
-                countryService.getAllCountries(),
-                CountryResponse::new
-        );
+        List<Country> countries = countryService.getAllCountries();
+        return ArrayResponse.of(countries, CountryResponse::new);
+
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")

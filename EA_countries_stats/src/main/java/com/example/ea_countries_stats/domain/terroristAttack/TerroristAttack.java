@@ -32,4 +32,5 @@ public class TerroristAttack {
     @ManyToOne
     @JoinColumn(name = "country_id", nullable = false)
     private Country country;
+
 }

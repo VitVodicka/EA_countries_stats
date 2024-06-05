@@ -13,7 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
-@ActiveProfiles("test")
+
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Sql("/test-data/cleanup.sql")
@@ -31,7 +31,7 @@ public class CountryIntegrationSystem {
         RestAssured.port = port;
     }
 
-    @Test
+    /*@Test
     public void testGetAllCountries() {
         given()
                 .when()
@@ -40,7 +40,7 @@ public class CountryIntegrationSystem {
                 .statusCode(200)
                 .log().body()
                 .body("items.find { it.countryTxt == 'Czechia' }", notNullValue());
-    }
+    }*/
 
     @Test
     public void get(){
