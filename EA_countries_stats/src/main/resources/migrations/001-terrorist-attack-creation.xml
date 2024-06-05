@@ -9,17 +9,8 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
         http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
 
-    <changeSet id="4" author="Vit">
-        <createTable tableName="country">
-            <column name="country_id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="country_txt" type="varchar(255)"/>
-            <column name="iso_code" type="varchar(255)"/>
-        </createTable>
-    </changeSet>
 
-    <changeSet id="5" author="Vit">
+    <changeSet id="1" author="Vit">
         <createTable tableName="terrorist_attack">
             <column name="attack_id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
@@ -40,6 +31,14 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="Vit">
+        <addForeignKeyConstraint baseTableName="terrorist_attack"
+                                 baseColumnNames="country_id"
+                                 constraintName="fk_terrorist_attack_country"
+                                 referencedTableName="country"
+                                 referencedColumnNames="country_id"/>
     </changeSet>
 
 </databaseChangeLog>

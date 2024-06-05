@@ -29,9 +29,6 @@ public class TerroristAttack {
     @NotNull
     private Integer casualties;
 
-    @NotNull
-    private Long countryId;
-
     @ManyToOne
     @JoinColumn(name = "country_id", nullable = false)
     private Country country;
