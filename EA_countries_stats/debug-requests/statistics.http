@@ -1,5 +1,0 @@
-### Get average terorist attacks in this year
-/average_terrorist_attacks/<year>
-### Get average terorist attacks base od countryid
-
-/average_terrorist_attacks/<countryid>

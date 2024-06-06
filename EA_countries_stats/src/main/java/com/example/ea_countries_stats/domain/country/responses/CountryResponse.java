@@ -1,6 +1,6 @@
-package com.example.ea_countries_stats.domain.country;
+package com.example.ea_countries_stats.domain.country.responses;
 
-import com.example.ea_countries_stats.domain.terroristAttack.TerroristAttack;
+import com.example.ea_countries_stats.domain.country.Country;
 
 import com.example.ea_countries_stats.domain.terroristAttack.TerroristAttackResponse;
 import jakarta.validation.constraints.NotNull;

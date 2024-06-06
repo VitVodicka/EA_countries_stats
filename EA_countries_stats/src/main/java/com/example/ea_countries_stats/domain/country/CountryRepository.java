@@ -8,6 +8,4 @@ import java.util.List;
 public interface CountryRepository extends CrudRepository<Country, Long> {
     @EntityGraph(attributePaths = "terroristAttacksList")
     List<Country> findAll();
-    // ...
-    Country findCountryByCountryIdEquals(long id);
 }

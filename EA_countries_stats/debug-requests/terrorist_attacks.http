@@ -1,8 +1,6 @@
 
-### calculate average number of terrorist attacks of country
-/average_terrorist_attacks/<country>
 ### delete terorist attack by id
-DELETE localhost:8090/terrorist_attacks/10
+DELETE localhost:8090/terrorist_attacks/9
 
 ### delete terorist attack by id
 POST http://localhost:8090/terrorist_attacks
@@ -27,6 +25,15 @@ Content-Type: application/json
   "casualities": 1000,
   "country_id": 1
 }
-### GETS request with json body
-GET http://localhost:8090/terrorist_attacks/
 
+### GETS average casualities of terroristattacks in span of min and max casualities
+GET http://localhost:8090/terrorist_attacks/casualities/averagecasulities/100/500
+
+### GETS terrorist attacks where is lower or higher casualities than number and sort it ascendingly or descendingly
+GET http://localhost:8090/terrorist_attacks/casualities/lowerorhighercasualities/lower/500/ASC
+
+### GETS weighted average of casualities
+GET http://localhost:8090/terrorist_attacks/casualities/weighted_average?weights=0.5,0.3,0.2
+
+### GETS standard derivation of casualites from value
+GET http://localhost:8090/terrorist_attacks/casualities/standarddeviationfromvalue/5

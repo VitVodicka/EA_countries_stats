@@ -14,3 +14,6 @@ Content-Type: application/json
   "countryTxt": "Germany",
   "isocode": "150-151"
 }
+
+### Gets a list of all countries and its probabilites of having a terrorist attacks
+GET localhost:8090/countries/probabilites

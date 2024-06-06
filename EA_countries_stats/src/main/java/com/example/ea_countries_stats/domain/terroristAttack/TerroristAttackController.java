@@ -1,17 +1,19 @@
 package com.example.ea_countries_stats.domain.terroristAttack;
 
 
-import com.example.ea_countries_stats.domain.country.Country;
-import com.example.ea_countries_stats.domain.country.CountryResponse;
 import com.example.ea_countries_stats.domain.country.CountryService;
-import com.example.ea_countries_stats.utils.exceptions.NotFoundException;
-import com.example.ea_countries_stats.utils.exceptions.TerroristAttackNotFound;
+import com.example.ea_countries_stats.utils.exceptions.NotAscOrDesc;
+
+import com.example.ea_countries_stats.utils.exceptions.NotLowerOrHigherException;
 import com.example.ea_countries_stats.utils.response.ObjectResponse;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("terrorist_attacks")
@@ -44,7 +46,7 @@ public class TerroristAttackController {
     @Transactional
     public ObjectResponse<TerroristAttackResponse> updateTerroristAttack(@PathVariable Long id, @RequestBody @Valid TerroristAttackRequest terroristAttackRequest) {
         TerroristAttack terroristAttack = terroristAttackService.getTerroristAttack(id)
-                .orElseThrow(TerroristAttackNotFound::new);
+                .orElseThrow(NotLowerOrHigherException::new);
         terroristAttackRequest.toTerroristAttack(terroristAttack, countryService);
 
         terroristAttackService.updateTerroristAttack(id, terroristAttack);
@@ -61,6 +63,43 @@ public class TerroristAttackController {
 
                     terroristAttackService.deleteTerroristAttack(id);
                 });
+    }
+
+    @GetMapping("/casualities/averagecasualities/{min}/{max}")
+    public ResponseEntity<Double> getAverageCasualitiesInRange(@PathVariable int min, @PathVariable int max) {
+        double averageCasualities = terroristAttackService.calculateAverageCasualitiesInRange(min, max);
+        return ResponseEntity.ok(averageCasualities);
+    }
+
+    @GetMapping("/casualities/lowerorhighercasualities/{direction}/{number}/{sortOrder}")
+    public List<TerroristAttackResponse> getTerroristAttacksByCasualities(@PathVariable String direction,
+                                                                          @PathVariable int numberHigherOrLower,
+                                                                          @PathVariable String sortOrder) {
+
+        if(direction.contains("lower")||(direction.contains("higher"))) {
+            if(sortOrder=="ASC"|| sortOrder=="DESC") {
+                return terroristAttackService.getTerroristAttacksByCasualities(direction, numberHigherOrLower, sortOrder);
+            }
+            throw new NotAscOrDesc();
+        }
+        throw new NotLowerOrHigherException();
+
+
+
+    }
+
+    @GetMapping("/casualities/weighted_average")
+    public ResponseEntity<Double> getWeightedAverageCasualities(@RequestParam List<Double> weights) {
+        double weightedAverage = terroristAttackService.calculateWeightedAverageCasualities(weights);
+
+        return ResponseEntity.ok(weightedAverage);
+    }
+
+    @GetMapping("/casualities/standarddeviationfromvalue/{value}")
+    public ResponseEntity<Double> getStandardDeviationFromValue(@PathVariable double value) {
+        double standardDeviation = terroristAttackService.calculateStandardDeviationFromValue(value);
+
+        return ResponseEntity.ok(standardDeviation);
     }
 
 

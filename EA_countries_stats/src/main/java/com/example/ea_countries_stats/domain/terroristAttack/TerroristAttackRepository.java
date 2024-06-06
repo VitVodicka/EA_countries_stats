@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface TerroristAttackRepository extends CrudRepository<TerroristAttack, Long> {
     List<TerroristAttack> findAll();
-    List<TerroristAttack> findByCountry_CountryId(Long countryId);
+
 }
 
