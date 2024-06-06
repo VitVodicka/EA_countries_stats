@@ -2,12 +2,12 @@ package com.example.ea_countries_stats.domain.terroristAttack;
 
 
 import com.example.ea_countries_stats.domain.country.CountryService;
-import com.example.ea_countries_stats.utils.exceptions.NotAscOrDesc;
+import com.example.ea_countries_stats.utils.exceptions.*;
 
-import com.example.ea_countries_stats.utils.exceptions.NotLowerOrHigherException;
 import com.example.ea_countries_stats.utils.response.ObjectResponse;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -31,11 +31,17 @@ public class TerroristAttackController {
     @ResponseStatus(HttpStatus.CREATED)
     @Valid
     public ObjectResponse<TerroristAttackResponse> createTerroristAttack (@RequestBody @Valid TerroristAttackRequest terroristAttackRequest) {
-        TerroristAttack terroristAttack= new TerroristAttack();
-        terroristAttackRequest.toTerroristAttack(terroristAttack, countryService);
-        terroristAttackService.createTerroristAttack(terroristAttack);
+        try {
+            TerroristAttack terroristAttack = new TerroristAttack();
+            terroristAttackRequest.toTerroristAttack(terroristAttack, countryService);
+            terroristAttackService.createTerroristAttack(terroristAttack);
 
-        return ObjectResponse.of(terroristAttack, TerroristAttackResponse::new);
+            return ObjectResponse.of(terroristAttack, TerroristAttackResponse::new);
+        } catch (DataAccessException e) {
+            throw new DatabaseAccessException("Error occurred while accessing the database", e);
+        } catch (RuntimeException e) {
+            throw new InternalServerErrorException("An unexpected error occurred", e);
+        }
 
 
     }
@@ -45,30 +51,49 @@ public class TerroristAttackController {
     @Valid
     @Transactional
     public ObjectResponse<TerroristAttackResponse> updateTerroristAttack(@PathVariable Long id, @RequestBody @Valid TerroristAttackRequest terroristAttackRequest) {
-        TerroristAttack terroristAttack = terroristAttackService.getTerroristAttack(id)
-                .orElseThrow(NotLowerOrHigherException::new);
-        terroristAttackRequest.toTerroristAttack(terroristAttack, countryService);
+        try {
+            TerroristAttack terroristAttack = terroristAttackService.getTerroristAttack(id)
+                    .orElseThrow(NotLowerOrHigherException::new);
+            terroristAttackRequest.toTerroristAttack(terroristAttack, countryService);
 
-        terroristAttackService.updateTerroristAttack(id, terroristAttack);
+            terroristAttackService.updateTerroristAttack(id, terroristAttack);
 
-        return ObjectResponse.of(terroristAttack, TerroristAttackResponse::new);
+            return ObjectResponse.of(terroristAttack, TerroristAttackResponse::new);
+        } catch (DataAccessException e) {
+            throw new DatabaseAccessException("Error occurred while accessing the database", e);
+        } catch (NotFoundException e) {
+            throw e; // Rethrow NotFoundException for custom handling
+        } catch (RuntimeException e) {
+            throw new InternalServerErrorException("An unexpected error occurred", e);
+        }
     }
 
     @DeleteMapping(value = "/{id}", produces = "application/json")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTerroistAttack(@PathVariable Long id) {
-        terroristAttackService
-                .getTerroristAttack(id)
-                .ifPresent(account -> {
+        try {
+            if (!terroristAttackService.getTerroristAttack(id).isPresent()) {
+                throw new NotFoundException("TerroristAtack with ID " + id + " not found");
+            }
 
-                    terroristAttackService.deleteTerroristAttack(id);
-                });
+            terroristAttackService.deleteTerroristAttack(id);
+        } catch (DataAccessException e) {
+            throw new DatabaseAccessException("Error occurred while accessing the database", e);
+        } catch (RuntimeException e) {
+            throw new InternalServerErrorException("An unexpected error occurred", e);
+        }
     }
 
     @GetMapping("/casualities/averagecasulities/{min}/{max}")
     public ResponseEntity<Double> getAverageCasualitiesInRange(@PathVariable int min, @PathVariable int max) {
-        double averageCasualities = terroristAttackService.calculateAverageCasualitiesInRange(min, max);
-        return ResponseEntity.ok(averageCasualities);
+        try {
+            double averageCasualities = terroristAttackService.calculateAverageCasualitiesInRange(min, max);
+            return ResponseEntity.ok(averageCasualities);
+        } catch (DataAccessException e) {
+            throw new DatabaseAccessException("Error occurred while accessing the database", e);
+        } catch (RuntimeException e) {
+            throw new InternalServerErrorException("An unexpected error occurred", e);
+        }
     }
 
     @GetMapping("/casualities/lowerorhighercasualities/{direction}/{numberHigherOrLower}/{sortOrder}")
@@ -76,13 +101,20 @@ public class TerroristAttackController {
                                                                           @PathVariable int numberHigherOrLower,
                                                                           @PathVariable String sortOrder) {
 
-        if(direction.contains("lower")||(direction.contains("higher"))) {
-            if(sortOrder.equals("ASC") || sortOrder.equals("DESC")) {
-                return terroristAttackService.getTerroristAttacksByCasualities(direction, numberHigherOrLower, sortOrder);
+        try {
+            if (direction.equals("lower") || direction.equals("higher")) {
+                if (sortOrder.equals("ASC") || sortOrder.equals("DESC")) {
+                    return terroristAttackService.getTerroristAttacksByCasualities(direction, numberHigherOrLower, sortOrder);
+                }
+                throw new NotAscOrDesc();
             }
-            throw new NotAscOrDesc();
+            throw new NotLowerOrHigherException();
+        } catch (DataAccessException e) {
+            throw new DatabaseAccessException("Error occurred while accessing the database", e);
+
+        } catch (RuntimeException e) {
+            throw new InternalServerErrorException("An unexpected error occurred", e);
         }
-        throw new NotLowerOrHigherException();
 
 
 
@@ -90,16 +122,27 @@ public class TerroristAttackController {
 
     @GetMapping("/casualities/weighted_average")
     public ResponseEntity<Double> getWeightedAverageCasualities(@RequestParam List<Double> weights) {
+        try {
         double weightedAverage = terroristAttackService.calculateWeightedAverageCasualities(weights);
 
         return ResponseEntity.ok(weightedAverage);
+        } catch (DataAccessException e) {
+            throw new DatabaseAccessException("Error occurred while accessing the database", e);
+        } catch (RuntimeException e) {
+            throw new InternalServerErrorException("An unexpected error occurred", e);
+        }
     }
 
     @GetMapping("/casualities/standarddeviationfromvalue/{value}")
     public ResponseEntity<Double> getStandardDeviationFromValue(@PathVariable double value) {
-        double standardDeviation = terroristAttackService.calculateStandardDeviationFromValue(value);
-
-        return ResponseEntity.ok(standardDeviation);
+        try {
+            double standardDeviation = terroristAttackService.calculateStandardDeviationFromValue(value);
+            return ResponseEntity.ok(standardDeviation);
+        } catch (DataAccessException e) {
+            throw new DatabaseAccessException("Error occurred while accessing the database", e);
+        } catch (RuntimeException e) {
+            throw new InternalServerErrorException("An unexpected error occurred", e);
+        }
     }
 
 

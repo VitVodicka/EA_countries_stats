@@ -39,7 +39,7 @@ public class CountryService {
     public List<CountryProbabilityResponse> getCountriesWithProbabilities() {
         List<Country> countries = getAllCountries();
         long totalAttacks = attackRepository.count();
-        //TODO check if totalAttacks is working
+
         List<CountryProbabilityResponse> result = new ArrayList<>();
         for (Country country : countries) {
             int countryAttacks = country.getTerroristAttacksList().size();

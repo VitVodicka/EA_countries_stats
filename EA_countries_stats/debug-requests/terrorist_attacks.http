@@ -1,8 +1,8 @@
-### working
-### delete terorist attack by id
-DELETE localhost:8090/terrorist_attacks/11
 
-### working
+### delete terorist attack by id
+DELETE localhost:8090/terrorist_attacks/4058
+
+
 ### delete terorist attack by id
 POST http://localhost:8090/terrorist_attacks
 Content-Type: application/json
@@ -15,7 +15,7 @@ Content-Type: application/json
   "country_id": 1
 }
 
-### working
+
 ### Send PUT request with json body
 PUT http://localhost:8090/terrorist_attacks/7
 Content-Type: application/json
@@ -28,18 +28,18 @@ Content-Type: application/json
   "country_id": 1
 }
 
-### working
+
 ### GETS average casualities of terroristattacks in span of min and max casualities
 GET http://localhost:8090/terrorist_attacks/casualities/averagecasulities/0/6
 
-### working
+
 ### GETS terrorist attacks where is lower or higher casualities than number and sort it ascendingly or descendingly
 GET http://localhost:8090/terrorist_attacks/casualities/lowerorhighercasualities/higher/100/ASC
 
-### working
+
 ### GETS weighted average of casualities
 http://localhost:8090/terrorist_attacks/casualities/weighted_average?weights=1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 
-### working
+
 ### GETS standard derivation of casualites from value
 GET http://localhost:8090/terrorist_attacks/casualities/standarddeviationfromvalue/5
