@@ -5,15 +5,5 @@ GET localhost:8090/countries
 GET localhost:8090/countries/1
 
 
-###: POST a mew country
-POST localhost:8090/countries
-Content-Type: application/json
-
-{
-  "countryId": 3,
-  "countryTxt": "Germany",
-  "isocode": "150-151"
-}
-
 ### Gets a list of all countries and its probabilites of having a terrorist attacks
 GET localhost:8090/countries/probabilites

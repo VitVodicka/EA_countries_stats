@@ -39,7 +39,7 @@ public class CountryController {
         return ObjectResponse.of(country, CountryResponse::new);
     }
 
-    @GetMapping(value = "/probabilities", produces = "application/json")
+    @GetMapping(value = "/probabilites", produces = "application/json")
     @Valid
     public ArrayResponse<CountryProbabilityResponse> getCountriesProbabilities() {
         List<CountryProbabilityResponse> probabilities = countryService.getCountriesWithProbabilities();

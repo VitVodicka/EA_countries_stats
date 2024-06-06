@@ -65,19 +65,19 @@ public class TerroristAttackController {
                 });
     }
 
-    @GetMapping("/casualities/averagecasualities/{min}/{max}")
+    @GetMapping("/casualities/averagecasulities/{min}/{max}")
     public ResponseEntity<Double> getAverageCasualitiesInRange(@PathVariable int min, @PathVariable int max) {
         double averageCasualities = terroristAttackService.calculateAverageCasualitiesInRange(min, max);
         return ResponseEntity.ok(averageCasualities);
     }
 
-    @GetMapping("/casualities/lowerorhighercasualities/{direction}/{number}/{sortOrder}")
+    @GetMapping("/casualities/lowerorhighercasualities/{direction}/{numberHigherOrLower}/{sortOrder}")
     public List<TerroristAttackResponse> getTerroristAttacksByCasualities(@PathVariable String direction,
                                                                           @PathVariable int numberHigherOrLower,
                                                                           @PathVariable String sortOrder) {
 
         if(direction.contains("lower")||(direction.contains("higher"))) {
-            if(sortOrder=="ASC"|| sortOrder=="DESC") {
+            if(sortOrder.equals("ASC") || sortOrder.equals("DESC")) {
                 return terroristAttackService.getTerroristAttacksByCasualities(direction, numberHigherOrLower, sortOrder);
             }
             throw new NotAscOrDesc();

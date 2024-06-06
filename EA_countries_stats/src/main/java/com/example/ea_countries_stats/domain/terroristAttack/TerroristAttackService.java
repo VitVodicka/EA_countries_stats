@@ -148,7 +148,7 @@ public class TerroristAttackService {
             sumOfWeightedNumbers+=multiplyedWeightsWithNumber.get(i);
         }
         for (int i = 0; i < weights.size(); i++) {
-            sumofWeights+=multiplyedWeightsWithNumber.get(i);
+            sumofWeights+=weights.get(i);
         }
         return sumOfWeightedNumbers/sumofWeights;
     }
