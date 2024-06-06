@@ -35,6 +35,10 @@ public class TerroristAttackService {
         return attackRepository.save(terroristAttack);
     }
 
+    public void saveTerroristAttacks(List<TerroristAttack> terroristAttacks) {
+        attackRepository.saveAll(terroristAttacks);
+    }
+
     public double calculateAverageCasualitiesInRange(int min, int max) {
         List<TerroristAttack> attacks = getAllTeroristAttacks();
         int sumCasualties = 0;

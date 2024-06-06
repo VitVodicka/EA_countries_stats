@@ -1,7 +1,9 @@
 package com.example.ea_countries_stats.utils.data;
 
 import com.example.ea_countries_stats.domain.country.Country;
-import com.example.ea_countries_stats.domain.country.CountryService;
+import com.example.ea_countries_stats.domain.country.CountryRepository;
+import com.example.ea_countries_stats.domain.terroristAttack.TerroristAttack;
+import com.example.ea_countries_stats.domain.terroristAttack.TerroristAttackRepository;
 import com.opencsv.CSVReader;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
@@ -11,6 +13,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.io.FileReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,53 +21,80 @@ import java.util.List;
 @Slf4j
 public class DataImporter {
 
-    private final CountryService userService;
+    private final CountryRepository countryRepository;
+    private final TerroristAttackRepository terroristAttackRepository;
     private final ResourceLoader resourceLoader;
 
-    public DataImporter(CountryService countryService, ResourceLoader resourceLoader) {
-        this.userService = countryService;
+    public DataImporter(CountryRepository countryRepository, TerroristAttackRepository terroristAttackRepository, ResourceLoader resourceLoader) {
+        this.countryRepository = countryRepository;
+        this.terroristAttackRepository = terroristAttackRepository;
         this.resourceLoader = resourceLoader;
     }
 
     @PostConstruct
     @Transactional
-    public void importCountries() {
-        // get data from 'resources' folder
-        Resource resource = resourceLoader.getResource("classpath:data/countries.csv");
-
-        // create Countries from data
-        List<Country> countryList = parseCountries(resource);
-
-        // save to db
-        userService.saveCountries(countryList);
+    public void importData() {
+        importCountries();
+        importTerroristAttacks();
     }
 
-    public List<Country> parseCountries(Resource resource) {
-        List<Country> userList = new ArrayList<>();
-        try {
-            CSVReader reader = new CSVReader(new FileReader(resource.getFile()));
+    private void importCountries() {
+        Resource resource = resourceLoader.getResource("classpath:data/countries.csv");
+        List<Country> countryList = parseCountries(resource);
+        countryRepository.saveAll(countryList);
+    }
 
-            // skip the header row
-            reader.skip(1);
-
-            // read row by row
+    private List<Country> parseCountries(Resource resource) {
+        List<Country> countries = new ArrayList<>();
+        try (CSVReader reader = new CSVReader(new FileReader(resource.getFile()))) {
             String[] nextLine;
             while ((nextLine = reader.readNext()) != null) {
-                String countryTxt = nextLine[0];
-                String isoCode = nextLine[1];
-
-                if (!countryTxt.isEmpty() && isoCode.length() > 2) {
-                    Country newCountry = new Country();
-                    newCountry.setCountryTxt(countryTxt);
-                    newCountry.setIsocode(isoCode);
-                    userList.add(newCountry);
-                }
+                Country country = new Country(nextLine[1], nextLine[2]);
+                countries.add(country);
             }
-            log.info("Loaded {} countries successfully.", userList.size());
-
+            log.info("Loaded {} countries successfully.", countries.size());
         } catch (Exception e) {
-            log.error("Error parsing CSV file", e);
+            log.error("Error parsing countries CSV file", e);
         }
-        return userList;
+        return countries;
+    }
+
+    private void importTerroristAttacks() {
+        Resource resource = resourceLoader.getResource("classpath:data/attacks.csv");
+        List<TerroristAttack> attackList = parseTerroristAttacks(resource);
+        terroristAttackRepository.saveAll(attackList);
+    }
+
+    private List<TerroristAttack> parseTerroristAttacks(Resource resource) {
+        List<TerroristAttack> attacks = new ArrayList<>();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try (CSVReader reader = new CSVReader(new FileReader(resource.getFile()))) {
+            reader.skip(1); // skip the header
+            String[] nextLine;
+            while ((nextLine = reader.readNext()) != null) {
+                TerroristAttack attack = new TerroristAttack();
+                attack.setDate(dateFormat.parse(nextLine[1]));
+                attack.setLocation(nextLine[2]);
+                attack.setTarget(nextLine[3]);
+                attack.setCasualties(Integer.parseInt(nextLine[4]));
+
+
+                Long countryId = Long.parseLong(nextLine[5]);
+                Country country = countryRepository.findCountryByCountryId(countryId);
+                if (country != null) {
+                    attack.setCountry(country);
+                    attacks.add(attack);
+                } else {
+                    log.warn("Country {} not found for attack on {}", nextLine[5], nextLine[1]);
+                }
+
+                attack.setCountry(country);
+                attacks.add(attack);
+            }
+            log.info("Loaded {} terrorist attacks successfully.", attacks.size());
+        } catch (Exception e) {
+            log.error("Error parsing terrorist attacks CSV file", e);
+        }
+        return attacks;
     }
 }

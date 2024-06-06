@@ -17,7 +17,7 @@ Content-Type: application/json
 
 
 ### Send PUT request with json body
-PUT http://localhost:8090/terrorist_attacks/7
+PUT http://localhost:8090/terrorist_attacks/81
 Content-Type: application/json
 
 {

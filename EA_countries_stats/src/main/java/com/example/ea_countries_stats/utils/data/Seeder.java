@@ -14,11 +14,12 @@ import java.util.ArrayList;
 public class Seeder {
 
     private final CountryService countryService;
-    // final TerroristAttackService terroristAttackService;
+    private final TerroristAttackService terroristAttackService;
 
-    public Seeder( CountryService countryService, TerroristAttackService terroristAttackService) {
+    public Seeder(CountryService countryService, TerroristAttackService terroristAttackService, TerroristAttackService terroristAttackService1) {
         this.countryService = countryService;
-        //this.terroristAttackService = terroristAttackService;
+
+        this.terroristAttackService = terroristAttackService1;
     }
     private boolean shouldSeedData() {
         return countryService.getAllCountries().isEmpty();
@@ -26,10 +27,10 @@ public class Seeder {
 
     @PostConstruct
     public void seedDefaultData() {
-       /* if (!shouldSeedData()) {
+        if (!shouldSeedData()) {
             log.info("--- Default data already seeded ---");
             return;
-        }*/
+        }
 
         //Country country1 = new Country( 1L, "Czechia", "151-05", new ArrayList<>());
         //Country country2 = new Country( 2L, "CzechoSlovaika", "151-05", new ArrayList<>());
