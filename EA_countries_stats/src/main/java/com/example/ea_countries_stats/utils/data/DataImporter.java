@@ -103,7 +103,6 @@ public class DataImporter {
             attacks.add(attack);
         } else {
             log.warn("Country {} not found for attack on {}", nextLine[5], nextLine[1]);
-            // You may handle this case differently based on your requirements
         }
         return attacks;
     }

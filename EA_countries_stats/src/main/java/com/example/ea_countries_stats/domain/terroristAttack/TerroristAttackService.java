@@ -83,7 +83,7 @@ public class TerroristAttackService {
     private TerroristAttack[] sortingByAscOrDesc(List<TerroristAttack> filteredAttacks, String sortOrder){
         TerroristAttack[] attackArray = filteredAttacks.toArray(new TerroristAttack[0]);
 
-
+        //selection sorting(choosing number lowest or highest and putting number on right place)
         for (int i = 0; i < attackArray.length - 1; i++) {
             int minOrMaxIndex = i;
             for (int j = i + 1; j < attackArray.length; j++) {

@@ -27,10 +27,11 @@ public class TerroristAttackController {
         this.countryService = countryService;
         this.terroristAttackService = terroristAttackService;
     }
+
     @PostMapping(value = "", produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     @Valid
-    public ObjectResponse<TerroristAttackResponse> createTerroristAttack (@RequestBody @Valid TerroristAttackRequest terroristAttackRequest) {
+    public ObjectResponse<TerroristAttackResponse> createTerroristAttack(@RequestBody @Valid TerroristAttackRequest terroristAttackRequest) {
         try {
             TerroristAttack terroristAttack = new TerroristAttack();
             terroristAttackRequest.toTerroristAttack(terroristAttack, countryService);
@@ -117,15 +118,14 @@ public class TerroristAttackController {
         }
 
 
-
     }
 
     @GetMapping("/casualities/weighted_average")
     public ResponseEntity<Double> getWeightedAverageCasualities(@RequestParam List<Double> weights) {
         try {
-        double weightedAverage = terroristAttackService.calculateWeightedAverageCasualities(weights);
+            double weightedAverage = terroristAttackService.calculateWeightedAverageCasualities(weights);
 
-        return ResponseEntity.ok(weightedAverage);
+            return ResponseEntity.ok(weightedAverage);
         } catch (DataAccessException e) {
             throw new DatabaseAccessException("Error occurred while accessing the database", e);
         } catch (RuntimeException e) {
