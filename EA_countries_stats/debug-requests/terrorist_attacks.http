@@ -1,9 +1,9 @@
 
 ### delete terorist attack by id
-DELETE localhost:8090/terrorist_attacks/4058
+DELETE localhost:8090/terrorist_attacks/1
 
 
-### delete terorist attack by id
+### post terorist attack
 POST http://localhost:8090/terrorist_attacks
 Content-Type: application/json
 

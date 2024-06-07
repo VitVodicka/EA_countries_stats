@@ -13,8 +13,10 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.io.FileReader;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -72,29 +74,37 @@ public class DataImporter {
             reader.skip(1); // skip the header
             String[] nextLine;
             while ((nextLine = reader.readNext()) != null) {
-                TerroristAttack attack = new TerroristAttack();
-                attack.setDate(dateFormat.parse(nextLine[1]));
-                attack.setLocation(nextLine[2]);
-                attack.setTarget(nextLine[3]);
-                attack.setCasualties(Integer.parseInt(nextLine[4]));
-
-
-                Long countryId = Long.parseLong(nextLine[5]);
-                Country country = countryRepository.findCountryByCountryId(countryId);
-                if (country != null) {
-                    attack.setCountry(country);
-                    attacks.add(attack);
-                } else {
-                    log.warn("Country {} not found for attack on {}", nextLine[5], nextLine[1]);
-                }
-
-                attack.setCountry(country);
-                attacks.add(attack);
+                attacks=settingTerroristAttack(nextLine,dateFormat,attacks);
             }
             log.info("Loaded {} terrorist attacks successfully.", attacks.size());
-        } catch (Exception e) {
-            log.error("Error parsing terrorist attacks CSV file", e);
+        } catch (Exception e) {log.error("Error parsing terrorist attacks CSV file", e);
+        }return attacks;
+    }
+
+    private List<TerroristAttack> settingTerroristAttack(String[] nextLine, SimpleDateFormat dateFormat, List<TerroristAttack> attacks) throws ParseException {
+        TerroristAttack attack = new TerroristAttack();
+        String dateString = nextLine[1];
+        if (dateString != null && !dateString.isEmpty()) {
+            attack.setDate(dateFormat.parse(dateString));
+        } else {
+            log.warn("Empty or null date string for terrorist attack: {}", Arrays.toString(nextLine));
+            // You may handle this case differently based on your requirements
+            return attacks;
+        }
+        attack.setLocation(nextLine[2]);
+        attack.setTarget(nextLine[3]);
+        attack.setCasualties(Integer.parseInt(nextLine[4]));
+
+        Long countryId = Long.parseLong(nextLine[5]);
+        Country country = countryRepository.findCountryByCountryId(countryId);
+        if (country != null) {
+            attack.setCountry(country);
+            attacks.add(attack);
+        } else {
+            log.warn("Country {} not found for attack on {}", nextLine[5], nextLine[1]);
+            // You may handle this case differently based on your requirements
         }
         return attacks;
     }
+
 }
