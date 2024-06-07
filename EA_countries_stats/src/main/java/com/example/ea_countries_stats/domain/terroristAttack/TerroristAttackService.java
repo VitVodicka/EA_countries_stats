@@ -173,4 +173,5 @@ public class TerroristAttackService {
         return Math.sqrt(sumOfNumbersFromDeviation/numberOfNumbersFromDeviation);
 
     }
+
 }

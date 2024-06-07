@@ -36,8 +36,10 @@ public class DataImporter {
     @PostConstruct
     @Transactional
     public void importData() {
-        importCountries();
-        importTerroristAttacks();
+        if(countryRepository.count()==0&&terroristAttackRepository.count()==0) {
+            importCountries();
+            importTerroristAttacks();
+        }
     }
 
     private void importCountries() {
@@ -71,7 +73,7 @@ public class DataImporter {
         List<TerroristAttack> attacks = new ArrayList<>();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try (CSVReader reader = new CSVReader(new FileReader(resource.getFile()))) {
-            reader.skip(1); // skip the header
+            //reader.skip(1); // skip the header
             String[] nextLine;
             while ((nextLine = reader.readNext()) != null) {
                 attacks=settingTerroristAttack(nextLine,dateFormat,attacks);
@@ -88,7 +90,6 @@ public class DataImporter {
             attack.setDate(dateFormat.parse(dateString));
         } else {
             log.warn("Empty or null date string for terrorist attack: {}", Arrays.toString(nextLine));
-            // You may handle this case differently based on your requirements
             return attacks;
         }
         attack.setLocation(nextLine[2]);

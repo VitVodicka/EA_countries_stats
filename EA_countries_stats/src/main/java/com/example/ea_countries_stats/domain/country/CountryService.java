@@ -44,9 +44,10 @@ public class CountryService {
         for (Country country : countries) {
             int countryAttacks = country.getTerroristAttacksList().size();
             double probability = totalAttacks > 0 ? (double) countryAttacks / totalAttacks : 0;
-            CountryProbabilityResponse response = new CountryProbabilityResponse(country, probability);
+            CountryProbabilityResponse response = new CountryProbabilityResponse(country, probability*100);
             result.add(response);
         }
         return result;
     }
+
 }
